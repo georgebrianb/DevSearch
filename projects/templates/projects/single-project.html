@@ -1,6 +1,14 @@
-{% extends 'main.html' %} {% block content %}
-<h1>Single Project Template</h1>
-<h2>{{project.title}}</h2>
+{% extends 'main.html' %} {% block content %} {% load static %}
+<img style="max-width: 500px" src="{{project.featured_image.url}}" />
+<h1>{{project.title}}</h1>
+<hr />
+{% for tag in project.tags.all %}
+<span style="border: 1px solid gray">{{tag}}</span>
+{% endfor %}
+<hr />
 <br />
-<a href="{% url 'project' project.id %}">{{project.description}}</a>
+<p>{{project.description}}</p>
+
+<a href="{% url 'update-project' project.id %}">Edit</a>
+
 {% endblock content %}
