@@ -46,7 +46,7 @@
                   <p>
                     <a
                       class="project__author"
-                      href="{% url 'project' project.id   %}"
+                      href="{% url 'user-profile' project.owner.id %}"
                       >By {{project.owner.name}}</a
                     >
                   </p>
@@ -55,7 +55,7 @@
                       >{{project.vote_ratio}}</span
                     >
                     <!-- Pluralize function specific to django - adds "s" if project.vote_total > 1 -->
-                    Postitive Feedback ({{project.vote_total}}
+                    Postitive Feedback ({{project.vote_ratio}}
                     Vote{{project.vote_total|pluralize:"s"}})
                   </p>
                   <div class="project__tags">

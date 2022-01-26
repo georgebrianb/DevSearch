@@ -11,4 +11,14 @@ def profiles(request):
 
 def userProfile(request, pk):
   profileObj = Profile.objects.get(id=pk)
-  return render(request, 'users/user-profile.html', {'profile': profileObj})
+
+  # topSkills = [skill for skill in skills if skill.description]
+  topSkills = profileObj.skill_set.all().exclude(description__exact="")
+  otherSkills = profileObj.skill_set.all().filter(description="")
+  context = {
+    'profile': profileObj,
+    'topSkills': topSkills,
+    'otherSkills': otherSkills
+  }
+  
+  return render(request, 'users/user-profile.html', context)
