@@ -21,7 +21,9 @@ def deleteUser(sender, instance, **kwargs):
 
 
 # anytime the save method is called upon the profile model, the
-# profileUpdate function will be run
-
+# createProfile function will be run
 post_save.connect(createProfile, sender=User)
+
+
+# same as above but for the delete method
 post_delete.connect(deleteUser, sender=Profile)
