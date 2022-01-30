@@ -9,23 +9,29 @@ from .models import Profile
 # Create your views here.
 
 def loginUser(request):
+  if request.user.is_authenticated:
+    return render(request, '')
   if request.method == "POST":
+    print(request.POST)
     username = request.POST['username']    
-    password = request.POST['password']
+    # password = request.POST['password']
+    password = request.POST.get('password')
+    print('pass:', password)
+    # try:
+    #   user = User.objects.get(username=username)
+    #   print('user in try block', user)
+    # except:
+    #   print('username does not exist')
     
-    try:
-      user = User.objects.get(username=username)
-      print('user in try block', user)
-    except:
-      print('username does not exist')
+    user = authenticate(username=str(username), password=str(password))
     
-    newuser = authenticate(request=request, username=username, password=password)
-    if newuser is not None:
-      login(request, newuser)
-      print('newuser: ', newuser)
+    
+    if user is not None:
+      login(request, user)
+      print('newuser: ', user)
       return redirect('profiles')
     else:
-      print('newuser in else: ', newuser)
+      print('newuser in else: ', user)
       print('user or pass incorrect')
     
   return render(request, 'users/login_register.html')
