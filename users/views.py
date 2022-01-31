@@ -1,41 +1,44 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # models
 from django.contrib.auth.models import User
 from .models import Profile
 
-# Create your views here.
+
+def logoutUser(request):
+  logout(request)
+  messages.error(request, 'User has been logged out')
+  return redirect('login')
+
+
+
 
 def loginUser(request):
   if request.user.is_authenticated:
-    return render(request, '')
+    return redirect('profiles')
   if request.method == "POST":
     print(request.POST)
     username = request.POST['username']    
-    # password = request.POST['password']
-    password = request.POST.get('password')
-    print('pass:', password)
-    # try:
-    #   user = User.objects.get(username=username)
-    #   print('user in try block', user)
-    # except:
-    #   print('username does not exist')
+    password = request.POST['password']
     
     user = authenticate(username=str(username), password=str(password))
     
     
     if user is not None:
       login(request, user)
-      print('newuser: ', user)
       return redirect('profiles')
     else:
-      print('newuser in else: ', user)
-      print('user or pass incorrect')
+      messages.error(request, 'Username / Password is incorrect')
     
   return render(request, 'users/login_register.html')
 
+
+def registerUser(request):
+  context = {}
+  return render(request, 'users/login_register.html', context) 
 
 def profiles(request):
   profiles = Profile.objects.all()
